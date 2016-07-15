@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.DepartDao;
+import po.Customer;
 import po.Depart;
 import util.DbUtil;
 
@@ -85,15 +87,39 @@ public class DepartDaoImpl implements DepartDao {
 
 	@Override
 	public List<Depart> showAllDepart() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Depart> ds = new ArrayList<Depart>();
+
+		String sql = "select * from depart";
+		Connection con = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		con = DbUtil.connect();
+		int m = 0;
+		try {
+			pst = con.prepareStatement(sql);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String dname = rs.getString("dname");
+				String city = rs.getString("city");
+				Depart depart  = new Depart(dname, city);
+				depart.setId(id);
+				ds.add(depart);
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} finally {
+			DbUtil.free(con, pst, null);
+		}
+		return ds;
 	}
 
 	@Override
 	public Depart loadDepart(int id) {
 		Depart departNew=null;
 
-		String sql = "select * from customer where id=?";
+		String sql = "select * from depart where id=?";
 		Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
