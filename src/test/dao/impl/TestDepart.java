@@ -7,7 +7,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import po.Customer;
 import po.Depart;
 import dao.DepartDao;
 import dao.impl.DepartDaoImpl;

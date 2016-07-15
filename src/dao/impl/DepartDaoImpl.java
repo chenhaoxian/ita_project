@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.DepartDao;
-import po.Customer;
 import po.Depart;
 import util.DbUtil;
 
