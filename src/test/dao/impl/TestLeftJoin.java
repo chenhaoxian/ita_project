@@ -21,7 +21,11 @@ public class TestLeftJoin {
 	ShowListDaoImpl leftJoin=new ShowListDaoImpl();
 	@Test
 	public void test() {
-		List<Person> ps=leftJoin.findPersonByDid(7);
+		List<Person> ps=leftJoin.findPersonByDid(5);
+		for(Person pss:ps){
+			System.out.println(pss.getCity());
+			System.out.println(pss.getDname());
+		}
 		Assert.assertTrue(!ps.isEmpty());
 	}	
 	@Test

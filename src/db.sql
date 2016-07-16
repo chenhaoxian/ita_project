@@ -8,4 +8,4 @@ create table depart(id number primary key, dname nvarchar2(10), city nvarchar2(1
 insert into depart(id,dname,city) values (department.nextval,'VEC','GA');
 select * from depart;
 
-select * from person left join depart on person.departId= depart.id where depart.id=7;
+select * from person left join depart on person.departId= depart.id where depart.id=5;
