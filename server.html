@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Server</title>
+</head>
+
+<body>
+
+<!-- <button onclick="myclick()" type="button">test</button>-->
+<a href="http://127.0.0.1:8889?test=start" id="aid">start</a> 
+
+<!-- <script type="text/javascript" src="jquery.min.js"></script> --> 
+
+<script type="text/javascript">
+function myclick(){
+	$.ajax({
+		type:"post",
+		url:"http://10.222.232.155:8889",
+		data:{
+			"test":"start"
+		},
+		success: function(data){
+			alert(1);
+		},
+		error:function(data){
+			alert("error");
+		}
+	});
+}
+
+
+</script>
+</body>
+
+</html>

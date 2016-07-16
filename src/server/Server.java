@@ -25,23 +25,25 @@ public class Server {
 
 	public static final int PORT = 8888;// 监听的端口号
 
-	public static void main(String[] args) {
-		System.out.println("Server Start...\n");
-		Server server = new Server();
-		server.init();
-	}
+	// public static void main(String[] args) {
+	// System.out.println("Server Start...\n");
+	// Server server = new Server();
+	// server.init();
+	// }
 
 	public void init() {
-		try {
-			ServerSocket serverSocket = new ServerSocket(PORT);
-			while (true) {
-				// 一旦有堵塞, 则表示服务器与客户端获得了连接
-				Socket client = serverSocket.accept();
-				// 处理这次连接
-				new HandlerThread(client);
+		while (true) {
+			try {
+				ServerSocket serverSocket = new ServerSocket(PORT);
+				while (true) {
+					// 一旦有堵塞, 则表示服务器与客户端获得了连接
+					Socket client = serverSocket.accept();
+					// 处理这次连接
+					new HandlerThread(client);
+				}
+			} catch (Exception e) {
+				System.out.println("服务器异常: " + e.getMessage());
 			}
-		} catch (Exception e) {
-			System.out.println("服务器异常: " + e.getMessage());
 		}
 	}
 
@@ -132,10 +134,10 @@ public class Server {
 					} else if ("A-D".equals(command)) {
 						if (value.toLowerCase().contains("dname")) {
 							Depart depart = new Depart();
-							for(int i = 0; i<value.split(",").length; i++){
-								if(value.split(",")[i].startsWith("dname")){
+							for (int i = 0; i < value.split(",").length; i++) {
+								if (value.split(",")[i].startsWith("dname")) {
 									depart.setDname(value.split(",")[i]);
-								}else{
+								} else {
 									depart.setCity(value.split(",")[i]);
 								}
 							}
