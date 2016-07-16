@@ -96,6 +96,7 @@ public class ShowListDaoImpl implements ShowListDao {
 				person.setTel(rs.getString("tel"));
 				person.setDepartId(rs.getInt("departId"));
 				person.setSalary(rs.getInt("salary"));
+				person.setCity(rs.getString("city"));
 				person.setDname(rs.getString("dname"));
 				person.setSalary(rs.getInt("salary"));
 				ps.add(person);
