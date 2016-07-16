@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import util.CheckInput;
+
 public class Client {
 
-	public static final String IP_ADDR = "localhost";//服务器地址   
-  public static final int PORT = 8888;//服务器端口号    
-    
-  public static void main(String[] args) {    
+	public static final String IP_ADDR = "localhost";// 服务器地址
+	public static final int PORT = 8888;// 服务器端口号
+
+	public static void main(String[] args) {    
       System.out.println("Client Start...");    
       System.out.println("当接收到服务器端字符为 \"Q\" 的时候, 客户端将终止\n");   
       while (true) {    
@@ -28,18 +30,33 @@ public class Client {
 //              String str = new BufferedReader(new InputStreamReader(System.in)).readLine();  
               BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
               String str = reader.readLine();
-              out.writeUTF(str);    
+//              if(CheckInput.check(str)){
+//              	out.writeUTF(str); 
+//      				}else{
+//      					System.out.println("Result from Server is: \n" ); 
+//      				}
+              
+              while(!CheckInput.check(str)){
+              	System.out.print("\nInput Error ! \n\nPlease Input : \t" );
+              	str = reader.readLine();
+              }
+              out.writeUTF(str); 
+                 
                   
               String ret = input.readUTF();     
-              System.out.println("Result from Server is: \n" );  
+              System.out.println("Result from Server is: " ); 
+//              System.out.println(ret+"\n");
               if(ret!=null||!"".equals(ret)){
               	if(ret.contains("#")){
               		String[] result = ret.split("#");
               		for(int i = 0; i<result.length; i++){
               			System.out.println(result[i]+"\n");
               		}
+              	}else {
+              		System.out.println(ret);
               	}
               }
+              
               // 如接收到 "OK" 则断开连接    
               if ("OK".equals(ret)) {    
                   System.out.println("Client Close!");    

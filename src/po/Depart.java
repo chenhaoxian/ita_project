@@ -7,6 +7,11 @@ public class Depart {
 	public Integer getId() {
 		return id;
 	}
+	
+	public Depart() {
+//		super();
+	}
+
 	public Depart(String dname, String city) {
 		super();
 		this.dname = dname;
