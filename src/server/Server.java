@@ -13,6 +13,15 @@ import com.teachercode.jdbc.dao.Hyman1Dao;
 import com.teachercode.jdbc.dao.impl.Hyman1DaoImpl;
 import com.teachercode.jdbc.po.Hyman1;
 
+import dao.AddDao;
+import dao.DeleteDao;
+import dao.ShowListDao;
+import dao.UpdateDao;
+import dao.impl.AddDaoImpl;
+import dao.impl.DeleteDaoImpl;
+import dao.impl.ShowListDaoImpl;
+import dao.impl.UpdateDaoImpl;
+
 public class Server {
 
 	public static final int PORT = 8888;// 监听的端口号
@@ -40,7 +49,10 @@ public class Server {
 	private class HandlerThread implements Runnable {
 		private Socket socket;
 
-		private Hyman1Dao dao = new Hyman1DaoImpl();
+		private AddDao addDao = new AddDaoImpl();
+		private DeleteDao deleteDao = new DeleteDaoImpl();
+		private ShowListDao showListDao = new ShowListDaoImpl();
+		private UpdateDao updateDao = new UpdateDaoImpl();
 
 		public HandlerThread(Socket client) {
 			socket = client;
