@@ -28,7 +28,7 @@ public class Server {
 	public static final int PORT = 8888;// 监听的端口号
 	private ServerSocket serverSocket = null;
 	private Socket client = null;
-	
+
 	private ArrayList<Socket> sockets = new ArrayList<Socket>();
 
 	// public static void main(String[] args) {
@@ -40,7 +40,7 @@ public class Server {
 	public void init() {
 		while (true) {
 			try {
-				 serverSocket = new ServerSocket(PORT);
+				serverSocket = new ServerSocket(PORT);
 				while (true) {
 					// 一旦有堵塞, 则表示服务器与客户端获得了连接
 					// System.out.println("Server start success!");
@@ -62,7 +62,7 @@ public class Server {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		System.out.println( "server 8888 关闭成功");
+		System.out.println("server 8888 关闭成功");
 	}
 
 	public ArrayList<Socket> getalivedSockets() {
@@ -106,14 +106,14 @@ public class Server {
 					if ("L-PA".equals(clientInputStr)) {
 						List<Person> list = showListDao.showAllPerson();
 						StringBuilder sb = new StringBuilder();
-						sb.append("pid").append("\t\t").append("name").append("\t\t").append("city").append("\t\t")
-								.append("Birth").append("\t\t").append("Salary").append("\t\t").append("Tel")
-								.append("\t\t").append("DepartId").append("\t\t").append("Dname").append("#");
+						sb.append("pid").append("\t\t").append("name").append("\t\t").append("city").append("\t\t").append("Birth")
+								.append("\t\t").append("Salary").append("\t\t").append("Tel").append("\t\t").append("DepartId")
+								.append("\t\t").append("Dname").append("#");
 						for (Person person : list) {
-							sb.append(person.getId()).append("\t\t").append(person.getCname()).append("\t\t")
-									.append(person.getCity()).append("\t\t").append(person.getBirth()).append("\t\t")
-									.append(person.getSalary()).append("\t\t").append(person.getTel()).append("\t\t")
-									.append(person.getDepartId()).append("\t\t").append(person.getDname()).append("#");
+							sb.append(person.getId()).append("\t\t").append(person.getCname()).append("\t\t").append(person.getCity())
+									.append("\t\t").append(person.getBirth()).append("\t\t").append(person.getSalary()).append("\t\t")
+									.append(person.getTel()).append("\t\t").append(person.getDepartId()).append("\t\t")
+									.append(person.getDname()).append("#");
 						}
 						out.writeUTF(sb.toString());
 					} else if ("L-DA".equals(clientInputStr)) {
@@ -121,17 +121,66 @@ public class Server {
 						StringBuilder sb = new StringBuilder();
 						sb.append("dId").append("\t\t").append("Dname").append("\t\t").append("City").append("#");
 						for (Depart depart : list) {
-							sb.append(depart.getId()).append("\t\t").append(depart.getDname()).append("\t\t")
-									.append(depart.getCity()).append("#");
+							sb.append(depart.getId()).append("\t\t").append(depart.getDname()).append("\t\t").append(depart.getCity())
+									.append("#");
 						}
 						out.writeUTF(sb.toString());
 					} else {
 						out.writeUTF("null");
 					}
-				} else if (clientInputStr.split("\\s+").length == 2) {
+				} else if (clientInputStr.split("\\s+").length == 2)
+				// {
+				// command = clientInputStr.split("\\s+")[0].trim();
+				// String value = clientInputStr.split("\\s+")[1].trim();
+				// if ("A-P".equals(command)) {
+				// if (value.toLowerCase().contains("pname") &&
+				// value.toLowerCase().contains("did")) {
+				// Person p = new Person();
+				// String[] data = value.split(",");
+				// for (int i = 0; i < data.length; i++) {
+				// if (data[i].toLowerCase().startsWith("pname")) {
+				// p.setCname(data[i].split(":")[1].trim());
+				// } else if (data[i].toLowerCase().startsWith("did")) {
+				// p.setId(Integer.parseInt(data[i].split(":")[1].trim()));
+				// } else if (data[i].toLowerCase().startsWith("birth")) {
+				// p.setBirth(data[i].split(":")[1].trim());
+				// } else if (data[i].toLowerCase().startsWith("tel")) {
+				// p.setTel(data[i].split(":")[1].trim());
+				// } else if (data[i].toLowerCase().startsWith("salary")) {
+				// p.setSalary(Integer.parseInt(data[i].split(":")[1].trim()));
+				// }
+				// }
+				// int result = addDao.addPerson(p);
+				// if (result == 1) {
+				// out.writeUTF("success");
+				// ;
+				// } else {
+				// out.writeUTF("fail");
+				// }
+				//
+				// } else {
+				// out.writeUTF("Input error");
+				// }
+				// } else if ("A-D".equals(command)) {
+				// if (value.toLowerCase().contains("dname")) {
+				// Depart depart = new Depart();
+				// for (int i = 0; i < value.split(",").length; i++) {
+				// if (value.split(",")[i].startsWith("dname")) {
+				// depart.setDname(value.split(",")[i]);
+				// } else {
+				// depart.setCity(value.split(",")[i]);
+				// }
+				// }
+				// }
+				// }
+				// }
+
+				{
 					command = clientInputStr.split("\\s+")[0].trim();
 					String value = clientInputStr.split("\\s+")[1].trim();
-					if ("A-P".equals(command)) {
+
+					switch (clientInputStr) {
+					case ("A-P"): {
 						if (value.toLowerCase().contains("pname") && value.toLowerCase().contains("did")) {
 							Person p = new Person();
 							String[] data = value.split(",");
@@ -150,16 +199,19 @@ public class Server {
 							}
 							int result = addDao.addPerson(p);
 							if (result == 1) {
-								out.writeUTF("success");
+								out.writeUTF("success A-P");
 								;
 							} else {
-								out.writeUTF("fail");
+								out.writeUTF("fail A-P");
 							}
 
 						} else {
 							out.writeUTF("Input error");
 						}
-					} else if ("A-D".equals(command)) {
+
+						break;
+					}
+					case ("A-D"): {
 						if (value.toLowerCase().contains("dname")) {
 							Depart depart = new Depart();
 							for (int i = 0; i < value.split(",").length; i++) {
@@ -169,9 +221,135 @@ public class Server {
 									depart.setCity(value.split(",")[i]);
 								}
 							}
+							int result = addDao.addDepart(depart);
+							if (result == 1) {
+								out.writeUTF("success A-D");
+							} else {
+								out.writeUTF("fail A-D");
+							}
+
+						} else {
+							out.writeUTF("Input error");
 						}
 					}
+
+						break;
+					case ("U-P"):
+						if (value.toLowerCase().contains("pid")) {
+							Person p = new Person();
+							String[] data = value.split(",");
+							for (int i = 0; i < data.length; i++) {
+								if (data[i].toLowerCase().startsWith("pname")) {
+									p.setCname(data[i].split(":")[1].trim());
+								} else if (data[i].toLowerCase().startsWith("did")) {
+									p.setId(Integer.parseInt(data[i].split(":")[1].trim()));
+								} else if (data[i].toLowerCase().startsWith("birth")) {
+									p.setBirth(data[i].split(":")[1].trim());
+								} else if (data[i].toLowerCase().startsWith("tel")) {
+									p.setTel(data[i].split(":")[1].trim());
+								} else if (data[i].toLowerCase().startsWith("salary")) {
+									p.setSalary(Integer.parseInt(data[i].split(":")[1].trim()));
+								}
+							}
+							int result = updateDao.updatePerson(p);
+							if (result == 1) {
+								out.writeUTF("success U-P");
+								;
+							} else {
+								out.writeUTF("fail");
+							}
+
+						} else {
+							out.writeUTF("Input error");
+						}
+
+						break;
+					case ("U-D"):
+						if (value.toLowerCase().contains("did")) {
+							Depart depart = new Depart();
+							for (int i = 0; i < value.split(",").length; i++) {
+								if (value.split(",")[i].startsWith("dname")) {
+									depart.setDname(value.split(",")[i]);
+								} else {
+									depart.setCity(value.split(",")[i]);
+								}
+								int result = updateDao.updateDepart(depart);
+								if (result == 1) {
+									out.writeUTF("success U-D");
+								} else {
+									out.writeUTF("fail U-D");
+								}
+							}
+
+						} else {
+							out.writeUTF("Input error");
+						}
+
+						break;
+					case ("D-P"):
+						if (value.toLowerCase().contains("pid")) {
+							String[] data = value.split(",");
+							int i = Integer.parseInt(data[1]);
+							int result = deleteDao.deletePerson(i);
+							if (result == 1) {
+								out.writeUTF("success D-P");
+							} else {
+								out.writeUTF("fail D-P");
+							}
+						} else {
+							out.writeUTF("Input error");
+						}
+
+						break;
+					case ("D-D"):
+
+						if (value.toLowerCase().contains("did")) {
+							String[] data = value.split(",");
+							int i = Integer.parseInt(data[1]);
+							int result = deleteDao.deleteDepart(i);
+							if (result == 1) {
+								out.writeUTF("success D-D");
+							} else {
+								out.writeUTF("fail D-D");
+							}
+						} else {
+							out.writeUTF("Input error");
+						}
+
+						break;
+					case ("L-PD"):
+
+						if (value.toLowerCase().contains("did") || value.toLowerCase().contains("DepartId")) {
+							String[] data = value.split(",");
+							int i = Integer.parseInt(data[1]);
+							List<Person> list = showListDao.findPersonByDid(i);
+							StringBuilder sb = new StringBuilder();
+							sb.append("pid").append("\t\t").append("name").append("\t\t").append("city").append("\t\t")
+									.append("Birth").append("\t\t").append("Salary").append("\t\t").append("Tel").append("\t\t")
+									.append("DepartId").append("\t\t").append("Dname").append("#");
+							for (Person person : list) {
+								sb.append(person.getId()).append("\t\t").append(person.getCname()).append("\t\t")
+										.append(person.getCity()).append("\t\t").append(person.getBirth()).append("\t\t")
+										.append(person.getSalary()).append("\t\t").append(person.getTel()).append("\t\t")
+										.append(person.getDepartId()).append("\t\t").append(person.getDname()).append("#");
+							}
+							out.writeUTF(sb.toString());
+
+						}
+
+						break;
+					case ("Q"):
+						out.writeUTF("Quit the server");
+						// 关闭sever的函数
+
+						break;
+					default:
+						out.writeUTF("Please enter the right signals");
+
+						break;
+					}
 				}
+
 				// out.writeUTF(clientInputStr);
 				// if (clientInputStr != null) {
 				// if(!clientInputStr.trim().contains(" ")){

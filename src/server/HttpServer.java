@@ -24,6 +24,7 @@ public class HttpServer implements Runnable {
 	private ServerSocket server = null;
 	private static Server myServer = new Server();
 	private List<Socket> list;
+	private int ii;
 
 	private static long threadId = 0;
 	private static Map<Long, Thread> map = null;
@@ -76,8 +77,7 @@ public class HttpServer implements Runnable {
 							if ("start".equals(key)) {
 								if (threadId == 0) {
 
-									// Server.main(null);
-									// new Thread(new StartThread()).start();
+
 									new Thread() {
 										@Override
 										public void run() {
@@ -94,10 +94,7 @@ public class HttpServer implements Runnable {
 
 										}
 									}.start();
-									
-//									List<Socket> list = myServer.getalivedSockets();
-//									System.out.println(list.size());
-//									System.out.println("test");
+
 									out.write("success".getBytes());
 								}else{
 									out.write("success".getBytes());
@@ -117,10 +114,6 @@ public class HttpServer implements Runnable {
 									}
 								}.start();
 
-//								threadId = 0;
-
-//								myServer.closeSocket(); 
-
 								System.out.println("Close Server Success ");
 								out.write("success".getBytes());
 		
@@ -130,10 +123,7 @@ public class HttpServer implements Runnable {
 								System.out.println(list.get(0).getPort());
 								System.out.println(list.get(0).getLocalPort());
 								System.out.println(list.get(0).getInetAddress().toString());
-//								out.write("test".getBytes());
-//								ObjectOutputStream oOut = new ObjectOutputStream(client.getOutputStream());
-//								oOut.writeObject(list);
-//								oOut.close();
+
 								if(list.size() != 0){
 									StringBuilder sb = new StringBuilder();
 									for(int i = 0; i<list.size(); i++){
@@ -144,7 +134,7 @@ public class HttpServer implements Runnable {
 									out.write("null".getBytes());
 								}
 							}
-						} else{
+						} else if(line.contains("=") && line.contains("&")){
 							String addr = line.split("key")[1].split("=")[1].split(" ")[0];
 //							System.out.println(addr);
 							addr = addr.substring(3, addr.length());
@@ -160,9 +150,21 @@ public class HttpServer implements Runnable {
 //							}
 							for(int i=0; i<list.size(); i++){
 								if(addr.equals(list.get(i).getInetAddress().toString())){
-									list.get(i).close();
-									list.remove(i);
-									System.out.println("client close sueccess");
+									ii = i;
+									new Thread(){
+										@Override
+										public void run() {
+										try {
+											list.get(ii).close();
+										} catch (IOException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+										list.remove(ii);
+										System.out.println("client close sueccess");
+										}
+									}.start();
+
 									break;
 								}
 							}
