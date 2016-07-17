@@ -7,24 +7,140 @@
 
 <body>
 
-<!-- <button onclick="myclick()" type="button">test</button>-->
-<a href="http://127.0.0.1:8889?test=start" id="aid">start</a> 
+ <button onclick="myStart()" type="button" id="btn_start">start</button>
+  <button onclick="myClose()" type="button" id="btn_close" disabled="disabled">close</button>
+<button id="btn_show" onclick="myShow()" style="display:none;">show client</button>
+<table >
+<th>编号</th><th>IP地址</th><th>操作</th>
+<tbody id="ip_data_body" >
+
+</tbody>
+</table>
+<!--<a href="http://127.0.0.1:8889?test=start" id="aid">start</a> -->
 
 <!-- <script type="text/javascript" src="jquery.min.js"></script> --> 
-
+<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript">
-function myclick(){
+function myStart(){
 	$.ajax({
-		type:"post",
-		url:"http://10.222.232.155:8889",
+		type:"get",
+		url:"http://127.0.0.1:8889",
 		data:{
 			"test":"start"
 		},
-		success: function(data){
-			alert(1);
+		success: function(data, textStatus){
+			//alert(data);
+			var str = data.split("\n");
+			var length = str.length;
+			//alert(length);
+			//alert(str[length-1].split("</html>")[1]);
+			var msg = str[length-1].split("</html>")[1];
+			if(msg == 'success'){
+				$("#btn_start").attr("disabled", true); 
+				$("#btn_close").attr("disabled", false); 
+				$("#btn_show").show();
+			}
+			//alert(str.split("</html>")[1]);  
 		},
 		error:function(data){
-			alert("error");
+			//alert(data);
+			//$.each(data,function(key,val){
+             //       if($.isPlainObject(val) || $.isArray(val)){
+            //            subObj(val);
+           //         }else{
+              //          alert(key+'='+val);
+            //        }
+             //   });
+			alert("error1");
+		}
+	});
+}
+
+function myClose(){
+	$.ajax({
+		type:"get",
+		url:"http://127.0.0.1:8889",
+		data:{
+			"test":"close"
+		},
+		success: function(data, textStatus){
+			var str = data.split("\n");
+			var length = str.length;
+			//alert(length);
+			//alert(str[length-1].split("</html>")[1]);
+			var msg = str[length-1].split("</html>")[1];
+			if(msg == 'success'){
+				$("#btn_close").attr("disabled", true); 
+				$("#btn_start").attr("disabled", false);
+				$("#btn_show").hide();
+				$("#ip_data_body").hide();
+			}
+			//alert(str.split("</html>")[1]);  
+		},
+		error:function(){
+			alert("error2");
+		}
+	});
+}
+
+function myShow(){
+	$.ajax({
+		type:"get",
+		url:"http://127.0.0.1:8889",
+		data:{
+			"test":"show"
+		},
+		//dataType:"json",
+		success: function(data, textStatus){
+			//alert(data);
+			var str = data.split("\n");
+			var length = str.length;
+			//alert(length);
+			//alert(str[length-1].split("</html>")[1]);
+			var msg = str[length-1].split("</html>")[1];
+			if(msg == 'null'){
+				alert('null');
+			}else{
+				var tbody = $("#ip_data_body");
+				var addrs = msg.split("#");
+				//alert(addrs.length);
+				$.each(addrs,function(n,val){
+                    if(val != ''){
+                    	var resultRow = "<tr><td>"+n+"</td><td>"+val+"</td><td><button onclick=\"closeClient('"+val+"','"+n+"')\">close client</button></td></tr>"
+                    	tbody.append(resultRow);
+                    }
+                });
+				
+			}
+		},
+		error:function(){
+			alert("error3");
+		}
+	});
+}
+
+function closeClient(val,row){
+	$.ajax({
+		type:"get",
+		url:"http://127.0.0.1:8889",
+		data:{
+			"test":"closeClient",
+			"key": val
+		},
+		//dataType:"json",
+		success: function(data, textStatus){
+			
+			var str = data.split("\n");
+			var length = str.length;
+			//alert(length);
+			//alert(str[length-1].split("</html>")[1]);
+			var msg = str[length-1].split("</html>")[1];
+			if(msg == 'success'){
+				$("#ip_data_body tr:eq("+row+")").hide();
+			}
+		},
+		error:function(){
+			alert("error4");
 		}
 	});
 }

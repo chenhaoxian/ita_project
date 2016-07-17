@@ -3,10 +3,12 @@ package server;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.AddDao;
@@ -24,6 +26,10 @@ import util.CheckInput;
 public class Server {
 
 	public static final int PORT = 8888;// 监听的端口号
+	private ServerSocket serverSocket = null;
+	private Socket client = null;
+	
+	private ArrayList<Socket> sockets = new ArrayList<Socket>();
 
 	// public static void main(String[] args) {
 	// System.out.println("Server Start...\n");
@@ -34,10 +40,13 @@ public class Server {
 	public void init() {
 		while (true) {
 			try {
-				ServerSocket serverSocket = new ServerSocket(PORT);
+				 serverSocket = new ServerSocket(PORT);
 				while (true) {
 					// 一旦有堵塞, 则表示服务器与客户端获得了连接
-					Socket client = serverSocket.accept();
+					// System.out.println("Server start success!");
+					client = serverSocket.accept();
+					sockets.add(client);
+
 					// 处理这次连接
 					new HandlerThread(client);
 				}
@@ -45,6 +54,25 @@ public class Server {
 				System.out.println("服务器异常: " + e.getMessage());
 			}
 		}
+	}
+
+	public void closeServerSocket() {
+		try {
+			this.serverSocket.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		System.out.println( "server 8888 关闭成功");
+	}
+
+	public ArrayList<Socket> getalivedSockets() {
+		ArrayList<Socket> list = new ArrayList<Socket>();
+		for (int i = 0; i < sockets.size(); i++) {
+			if (sockets.get(i).isConnected()) {
+				list.add(sockets.get(i));
+			}
+		}
+		return list;
 	}
 
 	private class HandlerThread implements Runnable {
@@ -78,14 +106,14 @@ public class Server {
 					if ("L-PA".equals(clientInputStr)) {
 						List<Person> list = showListDao.showAllPerson();
 						StringBuilder sb = new StringBuilder();
-						sb.append("pid").append("\t\t").append("name").append("\t\t").append("city").append("\t\t").append("Birth")
-								.append("\t\t").append("Salary").append("\t\t").append("Tel").append("\t\t").append("DepartId")
-								.append("\t\t").append("Dname").append("#");
+						sb.append("pid").append("\t\t").append("name").append("\t\t").append("city").append("\t\t")
+								.append("Birth").append("\t\t").append("Salary").append("\t\t").append("Tel")
+								.append("\t\t").append("DepartId").append("\t\t").append("Dname").append("#");
 						for (Person person : list) {
-							sb.append(person.getId()).append("\t\t").append(person.getCname()).append("\t\t").append(person.getCity())
-									.append("\t\t").append(person.getBirth()).append("\t\t").append(person.getSalary()).append("\t\t")
-									.append(person.getTel()).append("\t\t").append(person.getDepartId()).append("\t\t")
-									.append(person.getDname()).append("#");
+							sb.append(person.getId()).append("\t\t").append(person.getCname()).append("\t\t")
+									.append(person.getCity()).append("\t\t").append(person.getBirth()).append("\t\t")
+									.append(person.getSalary()).append("\t\t").append(person.getTel()).append("\t\t")
+									.append(person.getDepartId()).append("\t\t").append(person.getDname()).append("#");
 						}
 						out.writeUTF(sb.toString());
 					} else if ("L-DA".equals(clientInputStr)) {
@@ -93,8 +121,8 @@ public class Server {
 						StringBuilder sb = new StringBuilder();
 						sb.append("dId").append("\t\t").append("Dname").append("\t\t").append("City").append("#");
 						for (Depart depart : list) {
-							sb.append(depart.getId()).append("\t\t").append(depart.getDname()).append("\t\t").append(depart.getCity())
-									.append("#");
+							sb.append(depart.getId()).append("\t\t").append(depart.getDname()).append("\t\t")
+									.append(depart.getCity()).append("#");
 						}
 						out.writeUTF(sb.toString());
 					} else {
