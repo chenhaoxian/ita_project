@@ -179,7 +179,7 @@ public class Server {
 					command = clientInputStr.split("\\s+")[0].trim();
 					String value = clientInputStr.split("\\s+")[1].trim();
 
-					switch (clientInputStr) {
+					switch (command) {
 					case ("A-P"): {
 						if (value.toLowerCase().contains("pname") && value.toLowerCase().contains("did")) {
 							Person p = new Person();
@@ -288,7 +288,7 @@ public class Server {
 						break;
 					case ("D-P"):
 						if (value.toLowerCase().contains("pid")) {
-							String[] data = value.split(",");
+							String[] data = value.split(":");
 							int i = Integer.parseInt(data[1]);
 							int result = deleteDao.deletePerson(i);
 							if (result == 1) {
@@ -338,16 +338,15 @@ public class Server {
 						}
 
 						break;
-					case ("Q"):
-						out.writeUTF("Quit the server");
-						// 关闭sever的函数
-
-						break;
+					
 					default:
 						out.writeUTF("Please enter the right signals");
 
 						break;
 					}
+				}else if(clientInputStr == "Q"){
+					out.writeUTF(null);
+
 				}
 
 				// out.writeUTF(clientInputStr);

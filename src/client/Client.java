@@ -55,14 +55,18 @@ public class Client {
               	}else {
               		System.out.println(ret);
               	}
+              }else{
+              	System.out.println("Client Close!");    
+                Thread.sleep(500);    
+                break;    
               }
               
               // 如接收到 "OK" 则断开连接    
-              if ("OK".equals(ret)) {    
-                  System.out.println("Client Close!");    
-                  Thread.sleep(500);    
-                  break;    
-              }    
+//              if ("OK".equals(ret)) {    
+//                  System.out.println("Client Close!");    
+//                  Thread.sleep(500);    
+//                  break;    
+//              }    
                 
               out.close();  
               input.close();  

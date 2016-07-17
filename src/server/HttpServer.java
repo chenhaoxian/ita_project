@@ -23,8 +23,11 @@ public class HttpServer implements Runnable {
 	private final static int PORT = 8889;
 	private ServerSocket server = null;
 	private static Server myServer = new Server();
-	private List<Socket> list;
+	private List<Socket> list ;
 	private int ii;
+	private int iii;
+	private boolean flagR = false;
+	private boolean flag2 = false;
 
 	private static long threadId = 0;
 	private static Map<Long, Thread> map = null;
@@ -70,14 +73,12 @@ public class HttpServer implements Runnable {
 						String line = reader.readLine();
 						System.out.println("line: " + line);
 
-						System.out.println(threadId);
+//						System.out.println(threadId);
 						if (line.contains("=") && !line.contains("&")) {
 							String key = line.split("=")[1].split(" ")[0];
-							 System.out.println(threadId);
+//							 System.out.println(threadId);
 							if ("start".equals(key)) {
 								if (threadId == 0) {
-
-
 									new Thread() {
 										@Override
 										public void run() {
@@ -91,7 +92,6 @@ public class HttpServer implements Runnable {
 //											myServer = new Server();
 											System.out.println("Server start success!");
 											myServer.init();
-
 										}
 									}.start();
 
@@ -118,16 +118,31 @@ public class HttpServer implements Runnable {
 								out.write("success".getBytes());
 		
 							}else if("show".equals(key)){
-								System.out.println("===============");
+//								System.out.println("===============");
+//								if(myServer.getalivedSockets().size()>list.size()){
+//									
+//								}
+								iii = list.size();
+//								if()
 								list = myServer.getalivedSockets();
-								System.out.println(list.get(0).getPort());
-								System.out.println(list.get(0).getLocalPort());
-								System.out.println(list.get(0).getInetAddress().toString());
+								if(flagR&&flag2){
+									list.remove(ii);
+									flagR = false;
+								}
+								flag2 = false;
+//								if(list == null){
+//									list = myServer.getalivedSockets();
+//								}
+//								System.out.println(list.get(0).getPort());
+//								System.out.println(list.get(0).getLocalPort());
+//								System.out.println(list.get(0).getInetAddress().toString());
 
 								if(list.size() != 0){
 									StringBuilder sb = new StringBuilder();
 									for(int i = 0; i<list.size(); i++){
-										sb.append(list.get(i).getInetAddress()).append("#");
+										if(!sb.toString().contains(list.get(i).getInetAddress().toString())){
+											sb.append(list.get(i).getInetAddress()).append("#");
+										}
 									}
 									out.write(sb.toString().getBytes());
 								}else {
@@ -156,12 +171,16 @@ public class HttpServer implements Runnable {
 										public void run() {
 										try {
 											list.get(ii).close();
+											System.out.println("socket close....." + list.get(ii).isClosed());
 										} catch (IOException e) {
 											// TODO Auto-generated catch block
 											e.printStackTrace();
 										}
+										System.out.println(ii);
 										list.remove(ii);
-										System.out.println("client close sueccess");
+										flagR = true;
+//										System.out.println(list.size());
+//										System.out.println("client close sueccess");
 										}
 									}.start();
 
@@ -187,7 +206,7 @@ public class HttpServer implements Runnable {
 						continue;
 
 					} catch (Exception e) {
-						System.out.println("HTTP服务器错误:" + e.getLocalizedMessage());
+						System.out.println("HTTP服务器:" + e.getLocalizedMessage());
 					}
 				}
 			} catch (Exception e) {
