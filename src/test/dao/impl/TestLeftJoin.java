@@ -31,7 +31,7 @@ public class TestLeftJoin {
 	@Test
 	public void testDelete() {
 		DeleteDao dd=new DeleteDaoImpl();
-		dd.deleteDepart(7);
+		dd.deleteDepart(6);
 	}
 	@Test
 	public void regex() {

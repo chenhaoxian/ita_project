@@ -12,22 +12,29 @@ public class DeleteDaoImpl implements DeleteDao {
 	@Override
 	public int deleteDepart(int id) {
 		String sql = "delete from depart where id=?";
-		String sqlDP="delete from person where departId=?";
+//		String sqlDP="delete from person where departId=?";
 		Connection con = null;
 		PreparedStatement pst = null;
-		PreparedStatement pstDP = null;
+//		PreparedStatement pstDP = null;
 		con = DbUtil.connect();
 		int m = 0;
 		try {
 			pst = con.prepareStatement(sql);
 			pst.setInt(1, id);
 			m = pst.executeUpdate();
-			pstDP = con.prepareStatement(sqlDP);
-			pstDP.setInt(1, id);
+//			pstDP = con.prepareStatement(sqlDP);
+//			pstDP.setInt(1, id);
 			m = pst.executeUpdate();
+//			m = pstDP.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
+//			try {
+//				pstDP.close();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			DbUtil.free(con, pst, null);
 		}
 		return m;
