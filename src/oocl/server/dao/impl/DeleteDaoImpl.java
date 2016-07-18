@@ -1,11 +1,11 @@
-package dao.impl;
+package oocl.server.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import dao.DeleteDao;
-import util.DbUtil;
+import oocl.server.dao.DeleteDao;
+import oocl.util.DbUtil;
 
 public class DeleteDaoImpl implements DeleteDao {
 

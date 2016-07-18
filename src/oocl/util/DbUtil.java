@@ -1,4 +1,4 @@
-package util;
+package oocl.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -44,8 +44,8 @@ public class DbUtil {
 			e.printStackTrace();
 		}
 	}
-public static void main(String [] args){
-	System.out.println(DbUtil.connect());
-}
+//public static void main(String [] args){
+//	System.out.println(DbUtil.connect());
+//}
 }
 

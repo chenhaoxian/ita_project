@@ -10,12 +10,12 @@ import org.junit.Test;
 
 import com.sun.org.apache.xerces.internal.impl.xs.identity.Selector.Matcher;
 
-import dao.DeleteDao;
-import dao.ShowListDao;
-import dao.impl.DeleteDaoImpl;
-import dao.impl.ShowListDaoImpl;
+import oocl.po.Person;
+import oocl.server.dao.DeleteDao;
+import oocl.server.dao.ShowListDao;
+import oocl.server.dao.impl.DeleteDaoImpl;
+import oocl.server.dao.impl.ShowListDaoImpl;
 import oracle.net.aso.s;
-import po.Person;
 
 public class TestLeftJoin {
 	ShowListDaoImpl leftJoin=new ShowListDaoImpl();

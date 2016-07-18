@@ -1,17 +1,17 @@
-package operation;
+package oocl.operation;
 
 import java.util.List;
 
-import dao.AddDao;
-import dao.DeleteDao;
-import dao.ShowListDao;
-import dao.UpdateDao;
-import dao.impl.AddDaoImpl;
-import dao.impl.DeleteDaoImpl;
-import dao.impl.ShowListDaoImpl;
-import dao.impl.UpdateDaoImpl;
-import po.Depart;
-import po.Person;
+import oocl.po.Depart;
+import oocl.po.Person;
+import oocl.server.dao.AddDao;
+import oocl.server.dao.DeleteDao;
+import oocl.server.dao.ShowListDao;
+import oocl.server.dao.UpdateDao;
+import oocl.server.dao.impl.AddDaoImpl;
+import oocl.server.dao.impl.DeleteDaoImpl;
+import oocl.server.dao.impl.ShowListDaoImpl;
+import oocl.server.dao.impl.UpdateDaoImpl;
 
 public class DataBase {
 	

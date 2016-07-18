@@ -1,13 +1,13 @@
-package dao.impl;
+package oocl.server.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import dao.AddDao;
-import po.Depart;
-import po.Person;
-import util.DbUtil;
+import oocl.po.Depart;
+import oocl.po.Person;
+import oocl.server.dao.AddDao;
+import oocl.util.DbUtil;
 
 public class AddDaoImpl implements AddDao {
 

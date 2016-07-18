@@ -1,4 +1,4 @@
-package server;
+package oocl.server;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -23,11 +23,8 @@ public class HttpServer implements Runnable {
 	private final static int PORT = 8889;
 	private ServerSocket server = null;
 	private static Server myServer = new Server();
-	private List<Socket> list ;
+	private List<Socket> list;
 	private int ii;
-	private int iii;
-//	private boolean flagR = false;
-//	private boolean flag2 = false;
 
 	private static long threadId = 0;
 	private static Map<Long, Thread> map = null;
@@ -59,11 +56,11 @@ public class HttpServer implements Runnable {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 						OutputStream out = client.getOutputStream();
 						DataOutputStream dataOut = new DataOutputStream(client.getOutputStream());
-//						ObjectOutputStream oOut = new ObjectOutputStream(client.getOutputStream());
+						// ObjectOutputStream oOut = new
+						// ObjectOutputStream(client.getOutputStream());
 						out.write("HTTP/1.0 200 OK\r\n".getBytes());
 						out.write("Content-Type:text/html;charset=utf8\r\n".getBytes());
 						out.write("\r\n".getBytes());
-						// GET /test.jpg /HTTP1.1
 
 						InputStream in = new FileInputStream("server.html");
 						byte[] bs = new byte[in.available()];
@@ -73,38 +70,35 @@ public class HttpServer implements Runnable {
 						String line = reader.readLine();
 						System.out.println("line: " + line);
 
-//						System.out.println(threadId);
 						if (line.contains("=") && !line.contains("&")) {
 							String key = line.split("=")[1].split(" ")[0];
-//							 System.out.println(threadId);
+							// System.out.println(threadId);
 							if ("start".equals(key)) {
 								if (threadId == 0) {
 									new Thread() {
 										@Override
 										public void run() {
 											Thread thread = Thread.currentThread();
-											// System.out.println("Thread: " +
-											// thread);
 											System.out.println("Thread Id: " + thread.getId() + thread.getName());
 											threadId = thread.getId();
 											map = new HashMap<Long, Thread>();
 											map.put(threadId, thread);
-//											myServer = new Server();
+											// myServer = new Server();
 											System.out.println("Server start success!");
 											myServer.init();
 										}
 									}.start();
 
 									out.write("success".getBytes());
-								}else{
+								} else {
 									out.write("success".getBytes());
 								}
 							} else if ("close".equals(key)) {
 								Thread t = map.get(threadId);
 								System.out.println(t.getId() + t.getName());
-							
+
 								t.interrupt();
-								
+
 								new Thread() {
 									@Override
 									public void run() {
@@ -114,46 +108,47 @@ public class HttpServer implements Runnable {
 								}.start();
 								System.out.println("Close Server Success ");
 								out.write("success".getBytes());
-		
-							}else if("show".equals(key)){
 
-									list = myServer.getalivedSockets();
+							} else if ("show".equals(key)) {
 
-								if(list.size() != 0){
+								list = myServer.getalivedSockets();
+
+								if (list.size() != 0) {
 									StringBuilder sb = new StringBuilder();
-									for(int i = 0; i<list.size(); i++){
-										if(!sb.toString().contains(list.get(i).getInetAddress().toString())){
+									for (int i = 0; i < list.size(); i++) {
+										if (!sb.toString().contains(list.get(i).getInetAddress().toString())) {
 											sb.append(list.get(i).getInetAddress()).append("#");
 										}
 									}
 									out.write(sb.toString().getBytes());
-								}else {
+								} else {
 									out.write("null".getBytes());
 								}
 							}
-						} else if(line.contains("=") && line.contains("&")){
+						} else if (line.contains("=") && line.contains("&")) {
 							String addr = line.split("key")[1].split("=")[1].split(" ")[0];
-//							System.out.println(addr);
+							// System.out.println(addr);
 							addr = addr.substring(3, addr.length());
-//							System.out.println(addr);
-							addr = "/"+addr;
+							// System.out.println(addr);
+							addr = "/" + addr;
 
-							for(int i=0; i<list.size(); i++){
-								if(addr.equals(list.get(i).getInetAddress().toString())){
+							for (int i = 0; i < list.size(); i++) {
+								if (addr.equals(list.get(i).getInetAddress().toString())) {
 									ii = i;
-									new Thread(){
+
+									new Thread() {
 										@Override
 										public void run() {
-										try {
-											list.get(ii).close();
-											System.out.println("socket close....." + list.get(ii).isClosed());
-										} catch (IOException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-										System.out.println(ii);
-//										list.remove(ii);
-										myServer.removeSocket(ii);
+											try {
+												list.get(ii).close();
+												System.out.println("socket close....." + list.get(ii).isClosed());
+											} catch (IOException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+											System.out.println(ii);
+											// list.remove(ii);
+											myServer.removeSocket(ii);
 
 										}
 									}.start();
@@ -187,6 +182,5 @@ public class HttpServer implements Runnable {
 		}
 		System.out.println(socket + "离开了HTTP服务器");
 	}
-
 
 }

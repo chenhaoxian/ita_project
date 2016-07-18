@@ -1,4 +1,4 @@
-package client;
+package oocl.client;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import util.CheckInput;
+import oocl.util.CheckInput;
 
 public class Client {
 
@@ -16,19 +16,15 @@ public class Client {
 
 	public static void main(String[] args) {
 		System.out.println("Client Start...");
-		System.out.println("当接收到服务器端字符为 \"Q\" 的时候, 客户端将终止\n");
+		System.out.println("Input\"Q\" ,to stop Client\n");
 		while (true) {
 			Socket socket = null;
 			try {
 				socket = new Socket(IP_ADDR, PORT);
-
 				DataInputStream input = new DataInputStream(socket.getInputStream());
-				// 向服务器端发送数据
 				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 				System.out.print("Please Input: \t");
 
-				// String str = new BufferedReader(new
-				// InputStreamReader(System.in)).readLine();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 				String str = reader.readLine();
 
@@ -46,7 +42,6 @@ public class Client {
 					Thread.sleep(500);
 					break;
 				}
-
 				if (ret != null || !"".equals(ret)) {
 					if (ret.contains("#")) {
 						String[] result = ret.split("#");
@@ -61,18 +56,10 @@ public class Client {
 					Thread.sleep(500);
 					break;
 				}
-
-				// 如接收到 "OK" 则断开连接
-				// if ("OK".equals(ret)) {
-				// System.out.println("Client Close!");
-				// Thread.sleep(500);
-				// break;
-				// }
-
 				out.close();
 				input.close();
 			} catch (Exception e) {
-				System.out.println("客户端异常:" + e.getMessage());
+				System.out.println("start fail");
 			} finally {
 				if (socket != null) {
 					try {

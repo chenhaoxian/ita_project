@@ -1,4 +1,4 @@
-package operation;
+package oocl.operation;
 
 public interface Command {
 	

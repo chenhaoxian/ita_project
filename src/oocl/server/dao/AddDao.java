@@ -1,7 +1,7 @@
-package dao;
+package oocl.server.dao;
 
-import po.Depart;
-import po.Person;
+import oocl.po.Depart;
+import oocl.po.Person;
 
 public interface AddDao {
 

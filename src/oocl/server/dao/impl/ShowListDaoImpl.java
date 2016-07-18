@@ -1,4 +1,4 @@
-package dao.impl;
+package oocl.server.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.ShowListDao;
-import po.Depart;
-import po.Person;
-import util.DbUtil;
+import oocl.po.Depart;
+import oocl.po.Person;
+import oocl.server.dao.ShowListDao;
+import oocl.util.DbUtil;
 
 public class ShowListDaoImpl implements ShowListDao {
 

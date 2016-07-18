@@ -1,4 +1,4 @@
-package po;
+package oocl.po;
 
 public class Person {
 	private Integer id;

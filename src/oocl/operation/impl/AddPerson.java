@@ -1,6 +1,6 @@
-package operation.impl;
+package oocl.operation.impl;
 
-import operation.Command;
+import oocl.operation.Command;
 
 public class AddPerson implements Command {
 

@@ -1,4 +1,4 @@
-package dao;
+package oocl.server.dao;
 
 public interface DeleteDao {
 
