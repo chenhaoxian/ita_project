@@ -26,8 +26,8 @@ public class HttpServer implements Runnable {
 	private List<Socket> list ;
 	private int ii;
 	private int iii;
-	private boolean flagR = false;
-	private boolean flag2 = false;
+//	private boolean flagR = false;
+//	private boolean flag2 = false;
 
 	private static long threadId = 0;
 	private static Map<Long, Thread> map = null;
@@ -110,32 +110,14 @@ public class HttpServer implements Runnable {
 									public void run() {
 										Thread thread = Thread.currentThread();
 										myServer.closeServerSocket();
-
 									}
 								}.start();
-
 								System.out.println("Close Server Success ");
 								out.write("success".getBytes());
 		
 							}else if("show".equals(key)){
-//								System.out.println("===============");
-//								if(myServer.getalivedSockets().size()>list.size()){
-//									
-//								}
-								iii = list.size();
-//								if()
-								list = myServer.getalivedSockets();
-								if(flagR&&flag2){
-									list.remove(ii);
-									flagR = false;
-								}
-								flag2 = false;
-//								if(list == null){
-//									list = myServer.getalivedSockets();
-//								}
-//								System.out.println(list.get(0).getPort());
-//								System.out.println(list.get(0).getLocalPort());
-//								System.out.println(list.get(0).getInetAddress().toString());
+
+									list = myServer.getalivedSockets();
 
 								if(list.size() != 0){
 									StringBuilder sb = new StringBuilder();
@@ -155,14 +137,7 @@ public class HttpServer implements Runnable {
 							addr = addr.substring(3, addr.length());
 //							System.out.println(addr);
 							addr = "/"+addr;
-//							for(Socket clientSocket : list){
-//								if(addr.equals(clientSocket.getInetAddress().toString())){
-//									clientSocket.close();
-//									list.remove(clientSocket);
-//									System.out.println("client close sueccess");
-////									break;
-//								}
-//							}
+
 							for(int i=0; i<list.size(); i++){
 								if(addr.equals(list.get(i).getInetAddress().toString())){
 									ii = i;
@@ -177,10 +152,9 @@ public class HttpServer implements Runnable {
 											e.printStackTrace();
 										}
 										System.out.println(ii);
-										list.remove(ii);
-										flagR = true;
-//										System.out.println(list.size());
-//										System.out.println("client close sueccess");
+//										list.remove(ii);
+										myServer.removeSocket(ii);
+
 										}
 									}.start();
 
@@ -189,20 +163,10 @@ public class HttpServer implements Runnable {
 							}
 							out.write("success".getBytes());
 						}
-//						out.write("test".getBytes());
-						
-
-
 						out.close();
 						client.close();
 						in.close();
-//						oOut.close();
-						
-						// String resource = line.substring(line.indexOf('/'),
-						// line.lastIndexOf('/') - 5);
-						//
-						// System.out.println("==========="+resource);
-						// closeSocket(client);
+
 						continue;
 
 					} catch (Exception e) {
@@ -224,40 +188,5 @@ public class HttpServer implements Runnable {
 		System.out.println(socket + "离开了HTTP服务器");
 	}
 
-	private void transferFileHandle(String path, Socket client) {
-		File fileToSend = new File(path);
-		if (fileToSend.exists() && !fileToSend.isDirectory()) {
-			try {
-				PrintStream writer = new PrintStream(client.getOutputStream());
-				writer.println("HTTP/1.0 200 OK");// 返回应答消息,并结束应答
-				writer.println("Content-Type:application/binary");
-				writer.println("Content-Length:" + fileToSend.length());// 返回内容字节数
-				writer.println();// 根据 HTTP 协议, 空行将结束头信息
 
-				FileInputStream fis = new FileInputStream(fileToSend);
-				byte[] buf = new byte[fis.available()];
-				fis.read(buf);
-				writer.write(buf);
-				writer.close();
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-}
-
-class StartThread implements Runnable {
-
-	@Override
-	public void run() {
-		Thread thread = Thread.currentThread();
-		// System.out.println("Thread: " + thread);
-		// System.out.println("Thread Id: " + thread.getId());
-
-		Server server = new Server();
-		server.init();
-
-	}
 }

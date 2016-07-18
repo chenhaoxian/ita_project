@@ -28,6 +28,7 @@ public class Server {
 	public static final int PORT = 8888;// 监听的端口号
 	private ServerSocket serverSocket = null;
 	private Socket client = null;
+	private boolean flag = false;
 
 	private ArrayList<Socket> sockets = new ArrayList<Socket>();
 
@@ -46,12 +47,17 @@ public class Server {
 					// System.out.println("Server start success!");
 					client = serverSocket.accept();
 					sockets.add(client);
+					if(flag ) {
+						break;
+					}
 
 					// 处理这次连接
 					new HandlerThread(client);
 				}
 			} catch (Exception e) {
-				System.out.println("服务器异常: " + e.getMessage());
+				System.out.println(" " + e.getMessage());
+				
+
 			}
 		}
 	}
@@ -59,6 +65,7 @@ public class Server {
 	public void closeServerSocket() {
 		try {
 			this.serverSocket.close();
+			flag = true;
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -73,6 +80,10 @@ public class Server {
 			}
 		}
 		return list;
+	}
+	
+	public void removeSocket(int i){
+		sockets.remove(i);
 	}
 
 	private class HandlerThread implements Runnable {
@@ -129,52 +140,7 @@ public class Server {
 						out.writeUTF("null");
 					}
 				} else if (clientInputStr.split("\\s+").length == 2)
-				// {
-				// command = clientInputStr.split("\\s+")[0].trim();
-				// String value = clientInputStr.split("\\s+")[1].trim();
-				// if ("A-P".equals(command)) {
-				// if (value.toLowerCase().contains("pname") &&
-				// value.toLowerCase().contains("did")) {
-				// Person p = new Person();
-				// String[] data = value.split(",");
-				// for (int i = 0; i < data.length; i++) {
-				// if (data[i].toLowerCase().startsWith("pname")) {
-				// p.setCname(data[i].split(":")[1].trim());
-				// } else if (data[i].toLowerCase().startsWith("did")) {
-				// p.setId(Integer.parseInt(data[i].split(":")[1].trim()));
-				// } else if (data[i].toLowerCase().startsWith("birth")) {
-				// p.setBirth(data[i].split(":")[1].trim());
-				// } else if (data[i].toLowerCase().startsWith("tel")) {
-				// p.setTel(data[i].split(":")[1].trim());
-				// } else if (data[i].toLowerCase().startsWith("salary")) {
-				// p.setSalary(Integer.parseInt(data[i].split(":")[1].trim()));
-				// }
-				// }
-				// int result = addDao.addPerson(p);
-				// if (result == 1) {
-				// out.writeUTF("success");
-				// ;
-				// } else {
-				// out.writeUTF("fail");
-				// }
-				//
-				// } else {
-				// out.writeUTF("Input error");
-				// }
-				// } else if ("A-D".equals(command)) {
-				// if (value.toLowerCase().contains("dname")) {
-				// Depart depart = new Depart();
-				// for (int i = 0; i < value.split(",").length; i++) {
-				// if (value.split(",")[i].startsWith("dname")) {
-				// depart.setDname(value.split(",")[i]);
-				// } else {
-				// depart.setCity(value.split(",")[i]);
-				// }
-				// }
-				// }
-				// }
-				// }
-
+	
 				{
 					command = clientInputStr.split("\\s+")[0].trim();
 					String value = clientInputStr.split("\\s+")[1].trim();
@@ -345,7 +311,7 @@ public class Server {
 						break;
 					}
 				}else if(clientInputStr == "Q"){
-					out.writeUTF(null);
+					out.writeUTF("Q");
 
 				}
 
