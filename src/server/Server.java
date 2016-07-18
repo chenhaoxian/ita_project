@@ -147,7 +147,7 @@ public class Server {
 
 					switch (command) {
 					case ("A-P"): {
-						if (value.toLowerCase().contains("pname") && value.toLowerCase().contains("did")) {
+						if (value.toLowerCase().contains("pname")) {
 							Person p = new Person();
 							String[] data = value.split(",");
 							for (int i = 0; i < data.length; i++) {
@@ -164,7 +164,7 @@ public class Server {
 								}
 							}
 							int result = addDao.addPerson(p);
-							if (result == 1) {
+							if (result!=0) {
 								out.writeUTF("success A-P");
 								;
 							} else {
@@ -180,11 +180,12 @@ public class Server {
 					case ("A-D"): {
 						if (value.toLowerCase().contains("dname")) {
 							Depart depart = new Depart();
-							for (int i = 0; i < value.split(",").length; i++) {
-								if (value.split(",")[i].startsWith("dname")) {
-									depart.setDname(value.split(",")[i]);
-								} else {
-									depart.setCity(value.split(",")[i]);
+							String[] data = value.split(",");
+							for (int i = 0; i < data.length; i++) {
+								if (data[i].split(":")[i].startsWith("dname")) {
+									depart.setDname(value.split(":")[1].trim());
+								} else if(data[i].split(":")[i].startsWith("city")){
+									depart.setCity(value.split(":")[1].trim());
 								}
 							}
 							int result = addDao.addDepart(depart);
@@ -207,7 +208,7 @@ public class Server {
 							for (int i = 0; i < data.length; i++) {
 								if (data[i].toLowerCase().startsWith("pname")) {
 									p.setCname(data[i].split(":")[1].trim());
-								} else if (data[i].toLowerCase().startsWith("did")) {
+								} else if (data[i].toLowerCase().startsWith("pid")) {
 									p.setId(Integer.parseInt(data[i].split(":")[1].trim()));
 								} else if (data[i].toLowerCase().startsWith("birth")) {
 									p.setBirth(data[i].split(":")[1].trim());
@@ -218,11 +219,11 @@ public class Server {
 								}
 							}
 							int result = updateDao.updatePerson(p);
-							if (result == 1) {
+							if (result !=0) {
 								out.writeUTF("success U-P");
 								;
 							} else {
-								out.writeUTF("fail");
+								out.writeUTF("No this ID");
 							}
 
 						} else {
@@ -233,12 +234,15 @@ public class Server {
 					case ("U-D"):
 						if (value.toLowerCase().contains("did")) {
 							Depart depart = new Depart();
-							for (int i = 0; i < value.split(",").length; i++) {
-								if (value.split(",")[i].startsWith("dname")) {
-									depart.setDname(value.split(",")[i]);
-								} else {
-									depart.setCity(value.split(",")[i]);
-								}
+								String[] data = value.split(",");
+								for (int i = 0; i < data.length; i++) {
+									if (data[i].toLowerCase().startsWith("dname")) {
+										depart.setDname(data[i].split(":")[1].trim());
+									} else if (data[i].toLowerCase().startsWith("did")) {
+										depart.setId(Integer.parseInt(data[i].split(":")[1].trim()));
+									} else if (data[i].toLowerCase().startsWith("city")) {
+										depart.setCity(data[i].split(":")[1].trim());
+									}
 								int result = updateDao.updateDepart(depart);
 								if (result == 1) {
 									out.writeUTF("success U-D");
@@ -270,10 +274,11 @@ public class Server {
 					case ("D-D"):
 
 						if (value.toLowerCase().contains("did")) {
-							String[] data = value.split(",");
+							String[] data = value.split(":");
 							int i = Integer.parseInt(data[1]);
+							System.out.println(i);
 							int result = deleteDao.deleteDepart(i);
-							if (result == 1) {
+							if (result !=0) {
 								out.writeUTF("success D-D");
 							} else {
 								out.writeUTF("fail D-D");
@@ -286,7 +291,7 @@ public class Server {
 					case ("L-PD"):
 
 						if (value.toLowerCase().contains("did") || value.toLowerCase().contains("DepartId")) {
-							String[] data = value.split(",");
+							String[] data = value.split(":");
 							int i = Integer.parseInt(data[1]);
 							List<Person> list = showListDao.findPersonByDid(i);
 							StringBuilder sb = new StringBuilder();

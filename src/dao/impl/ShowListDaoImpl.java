@@ -47,7 +47,7 @@ public class ShowListDaoImpl implements ShowListDao {
 	public List<Person> showAllPerson() {
 		List<Person> ps = new ArrayList<Person>();
 
-		String sql = "select * from person";
+		String sql = "select * from person left join depart on person.departId= depart.id";
 		Connection con = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -62,7 +62,9 @@ public class ShowListDaoImpl implements ShowListDao {
 				String tel = rs.getString("tel");
 				int departId = rs.getInt("departId");
 				int salary = rs.getInt("salary");
-				Person person  = new Person(cname,birth,tel,departId,salary);
+				String dname = rs.getString("dname");
+				String city = rs.getString("city");
+				Person person  = new Person(cname,birth,tel,departId,salary,dname,city);
 				person.setId(id);
 				ps.add(person);
 			}
